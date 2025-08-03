@@ -1,0 +1,93 @@
+/* src/components/Form.css */
+
+.form-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #2c3e50;
+    font-family: 'Roboto', sans-serif;
+}
+
+.header-logo{
+    position: absolute;
+    top: 5px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 10px;
+    width: 80%;
+}
+
+.logooo{
+    width: 200px;
+}
+
+.form-wrapper h2{
+    margin-top: 20px;
+    color: #EF6F53;
+    text-transform: uppercase;
+}
+
+.form-body{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    color: #2c3e50;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.form-body label{
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    width: 100%;
+}
+
+.form-body label > input,
+.form-body label > textarea,
+.form-body label > select{
+    flex: 1;
+    padding: 2px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-body label > textarea{
+    resize: vertical;
+}
+
+.submit-btn{
+    background-color: #EF6F53;
+    color: #fff;
+    padding: 2px 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin:auto;
+}
+
+.submit-btn:hover{
+    background-color: #803120;
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+}   
+
+.status{
+    margin-top: 10px;
+    margin: auto;
+}
+
+.submit-container{
+    margin: auto;
+}
