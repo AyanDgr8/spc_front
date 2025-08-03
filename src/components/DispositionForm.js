@@ -11,7 +11,6 @@ const INIT = {
     call_type: '',
     disposition_1: '',
     disposition_2: '',
-    disposition_2_custom: '',
     query: '',
     queue_id: '',
     queue_name: '',
@@ -140,13 +139,17 @@ export default function DispositionForm() {
       disposition_2_custom: ''
     }));
     
-    if (disposition1 && values.call_type && dispositionHierarchy[values.call_type][disposition1]) {
+    // If "Others" is selected, don't show disposition 2 dropdown
+    if (disposition1 === 'Others') {
+      setAvailableDisposition2([]);
+      setShowCustomInput(false);
+    } else if (disposition1 && values.call_type && dispositionHierarchy[values.call_type][disposition1]) {
       setAvailableDisposition2(dispositionHierarchy[values.call_type][disposition1]);
+      setShowCustomInput(false);
     } else {
       setAvailableDisposition2([]);
+      setShowCustomInput(false);
     }
-    
-    setShowCustomInput(false);
   };
 
   // Handle disposition 2 change
@@ -214,18 +217,14 @@ export default function DispositionForm() {
       }
 
       setIsSuccess(true);
-      setStatus(recordId ? 'Form submitted successfully!' : 'Form submitted successfully!');
+      setStatus(recordId ? 'Form updated successfully!' : 'Form submitted successfully!');
       
+      // Reset form automatically after 3 seconds for new submissions
       if (!recordId) {
-        // Reset form for new submissions after a short delay to show success message
         setTimeout(() => {
-          setValues(INIT);
-          setAvailableDisposition1([]);
-          setAvailableDisposition2([]);
-          setShowCustomInput(false);
-          setIsSuccess(false);
-          setStatus('');
-        }, 2000); // Reset after 2 seconds
+          console.log('Auto-resetting form after 3 seconds...');
+          resetForm();
+        }, 3000); // Reset after 3 seconds
       } else {
         // For updates, clear success status after showing the message
         setTimeout(() => {
@@ -240,6 +239,42 @@ export default function DispositionForm() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  // Reset form to initial state
+  const resetForm = () => {
+    console.log('Starting form reset...');
+    
+    // Reset all form values to empty strings
+    setValues({
+      company: '',
+      name: '',
+      contact_number: '',
+      email: '',
+      call_type: '',
+      disposition_1: '',
+      disposition_2: '',
+      query: '',
+      queue_id: '',
+      queue_name: '',
+      agent_id: '',
+      agent_ext: '',
+      caller_id_name: '',
+      caller_id_number: '',
+    });
+    
+    // Reset all dropdown states
+    setAvailableDisposition1([]);
+    setAvailableDisposition2([]);
+    setShowCustomInput(false);
+    
+    // Reset form states
+    setRecordId(null);
+    setIsSuccess(false);
+    setStatus('');
+    setIsSubmitting(false);
+    
+    console.log('Form reset completed - all values cleared');
   };
 
   return (
@@ -333,7 +368,7 @@ export default function DispositionForm() {
               onChange={(e) => handleDisposition1Change(e.target.value)}
               required
             >
-              <option value="">Select Category</option>
+              <option value="">Select Disposition 1</option>
               {availableDisposition1.map(disp1 => (
                 <option key={disp1} value={disp1}>{disp1}</option>
               ))}
@@ -350,7 +385,7 @@ export default function DispositionForm() {
               onChange={(e) => handleDisposition2Change(e.target.value)}
               required
             >
-              <option value="">Select Sub-Category</option>
+              <option value="">Select Disposition 2</option>
               {availableDisposition2.map(disp2 => (
                 <option key={disp2.value} value={disp2.value}>
                   {disp2.value}
@@ -390,7 +425,11 @@ export default function DispositionForm() {
         </div>
         )}
         <div className="submit-container">
-          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+          <button 
+            type="submit" 
+            className="submit-btn" 
+            disabled={isSubmitting || isSuccess}
+          >
             {isSubmitting ? 'Submitting...' : (isSuccess ? 'Submitted ✓' : 'Submit')}
           </button>
         </div>
