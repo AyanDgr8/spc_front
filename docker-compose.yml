@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  form_front:
+    build:
+      context: .
+    container_name: form_front
+    ports:
+      - "8991:7775"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules  # prevent host node_modules from overwriting container
+    command: npm start
+
